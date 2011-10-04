@@ -115,16 +115,16 @@ class lb_log_parser
                         $formated_log['ip'] = $logs[3];
 			$formated_log['identity'] = $logs[4];
 			$formated_log['user'] = $logs[5];
-			$formated_log['date'] = $logs[6];
+			$formated_log['date'] = DateTime::createFromFormat('d/M/Y', $logs[6]);
 			$formated_log['time'] = $logs[7];
 			$formated_log['timezone'] = $logs[8];
 			$formated_log['method'] = $logs[9];
 			$formated_log['path'] = $logs[10];
-			$formated_log['protocal'] = $logs[11];
-			$formated_log['status'] = $logs[12];
-			$formated_log['bytes'] = $logs[13];
-			$formated_log['referer'] = $logs[14];
-			$formated_log['agent'] = $logs[15];
+			$formated_log['protocol'] = $logs[11];
+			$formated_log['status'] = (int)$logs[12];
+			$formated_log['bytes'] = (int)$logs[13];
+			$formated_log['referrer'] = str_replace("\"", "", $logs[14]);
+			$formated_log['agent'] = str_replace("\"", "", $logs[15]);
 			return $formated_log; // return the array of info
 		}
 		else
