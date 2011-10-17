@@ -3,6 +3,10 @@ require_once('includes/settings.inc.php');
 require_once('includes/lb_log_parser.php');
 require_once('includes/adodb5/adodb.inc.php');
 
+error_reporting(E_ALL); 
+ini_set("display_errors", 1);
+
+
 $DB = NewADOConnection('mysql');
 $DB->Connect(DB_SERVER, DB_USER, DB_PASS, DB_NAME);
 //$DB->debug=1;
@@ -40,6 +44,7 @@ if ($zipCount > 0) {
     echo "extracting ". $zipCount . " zip files\n";
     for($z=0; $z < $zipCount; $z++) {
         $zip = new ZipArchive;
+        $contents = "";
         echo $zipArray[$z];
         if ($zip->open(LOG_PATH.$zipArray[$z]) === TRUE) {
             //Rackspace saves the file with a : in the filename
@@ -99,7 +104,28 @@ for($i=0; $i < $indexCount; $i++) {
             foreach($output as $logRow) {
                 $record = $logRow;
                 $record["FileID"] = (int)$fileRowID;
-                $insertSQL = $DB->AutoExecute("rawlogs", $record, 'INSERT');
+                
+                $sql = "INSERT INTO rawlogs (FileID, balancerid, host, ip, identity, user, date, time, timezone, method, path, protocol, status, bytes, referrer, agent) ".
+                        "VALUES (" .
+                        $record["FileID"] .", " .
+                        "'".$record["balancerid"]."', ".
+                        "'".$record["host"]."', ".
+                        "'".$record["ip"]."', ".
+                        "'".$record["identity"]."', ".
+                        "'".$record["user"]."', ".
+                        "'".date_format($record["date"], 'Y-m-d')."', ".
+                        "'".$record["time"]."', ".
+                        "'".$record["timezone"]."', ".
+                        "'".$record["method"]."', ".
+                        "'".$record["path"]."', ".
+                        "'".$record["protocol"]."', ".
+                        $record["status"] .", " .
+                        $record["bytes"] .", " .
+                        "'".$record["referrer"]."', ".
+                        "'".$record["agent"]."');";
+                
+                $DB->Execute($sql);
+                //$insertSQL = $DB->AutoExecute("rawlogs", $record, 'INSERT');
                 //echo "sql=".$insertSQL."\n";
             }
         } else {
