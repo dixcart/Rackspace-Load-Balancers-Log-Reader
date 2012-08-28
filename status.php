@@ -7,9 +7,10 @@
 </head>
 <body>
 
-	<p>Downloaded Files: <span id="downloaded-files"></span></p>
-	<p>Processed Files: <span id="processed-files"></span></p>
-	<p>Log Lines: <span id="log-lines"></span></p>
+	<p><strong>Downloaded Files</strong>: <span id="downloaded-files"></span></p>
+	<p><strong>Processed Files</strong>: <span id="processed-files"></span></p>
+	<p><strong>Log Lines</strong>: <span id="log-lines"></span></p>
+	<p><strong>Last File</strong>: <span id="last-file"></span></p>
 
 <script type="text/javascript">
 
@@ -25,6 +26,7 @@
 				$('#log-lines').html(formatNumber(data.rawlogs));
 				$('#processed-files').html(formatNumber(data.processed));
 				$('#downloaded-files').html(formatNumber(data.downloads));
+				$('#last-file').html(data.lastfile);
 				updateLogLines();
 			}
 		})
